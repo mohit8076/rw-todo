@@ -6,6 +6,9 @@ import { Toaster } from '@redwoodjs/web/toast'
 import { toast } from '@redwoodjs/web/toast'
 import { useState } from 'react'
 import { TodoForm } from 'src/components/TodoForm/TodoForm'
+import { useAuth } from '@redwoodjs/auth'
+import { Link, navigate, routes } from '@redwoodjs/router'
+
 
 const CREATE_TODO = gql`
   mutation CreateTodoMutation($input: CreateTodoInput!) {
@@ -33,6 +36,7 @@ const DELETE_TODO = gql`
 `
 
 const TodosPage = () => {
+  const { isAuthenticated, currentUser, logOut } = useAuth()
   const formMethods = useForm()
   const [todoState, setTodoState] = useState({id:'', name:''});
   const [isEdit, setIsEdit] = useState(false);
@@ -71,9 +75,24 @@ const TodosPage = () => {
     deleteTodo({variables:{id}})
   }
 
+  const backHome = () => {
+    logOut()
+    navigate(routes.home())
+    console.log(!isAuthenticated)
+
+  }
   return (
     <>
       <MetaTags title="Home" description="Home page" />
+      {isAuthenticated ? (
+            <div>
+              <button className='px-5 py-2 ml-2 mt-4 bg-red-200 rounded-md font-semibold' type="button" onClick={backHome}>
+                Logout
+              </button>
+            </div>
+          ) : (
+            <Link to={routes.home()}>Login</Link>
+          )}
       <Toaster/>
       <div>
         <TodoForm onSubmit={!isEdit ? onSubmit : onClick} defaultState={todoState.name} isEdit={isEdit} formMethods={formMethods}/>

@@ -22,13 +22,12 @@ import { db } from './db'
  */
 export const getCurrentUser = async (session: Decoded) => {
   if (!session || typeof session.id !== 'number') {
-    return null
+    throw new Error('Invalid session')
   }
 
   return await db.user.findUnique({
     where: { id: session.id },
-    select: { id: true },
-  })
+    select: { id: true, email: true},  })
 }
 
 /**

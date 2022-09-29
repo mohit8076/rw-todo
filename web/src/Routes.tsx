@@ -8,16 +8,24 @@
 // 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
 
 import { Private, Router, Route } from '@redwoodjs/router'
+import ForgotPasswordPage from './pages/ForgotPasswordPage/ForgotPasswordPage'
 import HomePage from './pages/HomePage/HomePage'
+import LoginPage from './pages/LoginPage/LoginPage'
+import ResetPasswordPage from './pages/ResetPasswordPage/ResetPasswordPage'
+import SignupPage from './pages/SignupPage/SignupPage'
 
 const Routes = () => {
   return (
     <Router>
-      <Route path="/home" page={HomePage} name="home" />
-      {/* <Private unauthenticated="home"> */}
+      <Route path="/login" page={LoginPage} name="login" />
+      <Route path="/signup" page={SignupPage} name="signup" />
+      <Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
+      <Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
+      <Route path="/" page={HomePage} name="home" />
+      <Private unauthenticated="signup">
         <Route path="/admin/todo" page={TodoPage} name="todo" />
         <Route notfound page={NotFoundPage} />
-      {/* </Private> */}
+      </Private>
     </Router>
   )
 }
